@@ -1,5 +1,7 @@
 # Ignore data and model files
 data/
+models/
+logs/
 
 __pycache__/
 *.py[cod]
