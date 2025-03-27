@@ -63,13 +63,11 @@ This repository contains a comprehensive take-home assignment designed to assess
    ```bash
    git clone https://github.com/nanjala116/mystic_mosaic.git
    ```
-
 
 2. **Navigate to the Project Directory**:
    ```bash
    cd mystic_mosaic
    ```
-
 
 3. **Set Up the Environment**:
    - Ensure Python 3.11.8 is installed.
