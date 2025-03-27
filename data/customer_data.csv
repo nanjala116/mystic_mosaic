@@ -1,0 +1,6 @@
+customer_id,name,age,city,income,purchase_amount,signup_date
+101,John Doe,25,New York,55000,120,2022-05-10
+102,Jane Smith,,Los Angeles,62000,,2022-07-15
+103,Michael Lee,45,Chicago,78000,250,
+104,Emma Brown,30,,52000,95,2022-10-30
+105,Robert Johnson,29,San Francisco,70000,190,2021-12-25
