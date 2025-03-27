@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from pathlib import Path
 import joblib
 import numpy as np
 from pydantic import BaseModel
+import sys
+import os
 
 # Define the request schema using Pydantic
 class LoanInput(BaseModel):
@@ -17,13 +20,22 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Load the trained model from the models folder
-model_path = "../models/loan_model.pkl"
+# Get the absolute path to the model file
 try:
-    model = joblib.load(model_path)
-    print("Model loaded successfully from", model_path)
+    # Resolve the path relative to this script's location
+    SCRIPT_DIR = Path(__file__).parent.resolve()
+    MODEL_PATH = SCRIPT_DIR.parent / "models" / "loan_model.pkl"
+    
+    # Verify the model file exists
+    if not MODEL_PATH.exists():
+        raise FileNotFoundError(f"Model file not found at {MODEL_PATH}")
+    
+    # Load the model
+    model = joblib.load(MODEL_PATH)
+    print(f"Model loaded successfully from {MODEL_PATH}")
+    
 except Exception as e:
-    print("Error loading model:", e)
+    print(f"Error loading model: {str(e)}", file=sys.stderr)
     model = None
 
 @app.post("/predict")
@@ -43,14 +55,29 @@ def predict_loan_default(loan: LoanInput):
     }
     """
     if model is None:
-        return {"error": "Model not loaded."}
+        raise HTTPException(
+            status_code=503,
+            detail="Model not loaded. Service unavailable."
+        )
     
-    # Arrange features in the same order as during model training
-    features = np.array([[loan.age, loan.income, loan.loan_amount, loan.credit_score]])
-    
-    # Predict probability: assume index 1 corresponds to the default probability.
-    probability = model.predict_proba(features)[0][1]
-    return {"loan_default_probability": float(probability)}
+    try:
+        # Arrange features in the same order as during model training
+        features = np.array([
+            [loan.age, loan.income, loan.loan_amount, loan.credit_score]
+        ])
+        
+        # Predict probability (assuming index 1 is default probability)
+        probability = model.predict_proba(features)[0][1]
+        
+        return {
+            "loan_default_probability": round(float(probability), 4)
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Prediction error: {str(e)}"
+        )
 
 if __name__ == '__main__':
     import uvicorn
