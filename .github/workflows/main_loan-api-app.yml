@@ -76,4 +76,4 @@ jobs:
         id: deploy-to-webapp
         with:
           app-name: "loan-api-app"
-          slot-name: "Production"
+          package: .
