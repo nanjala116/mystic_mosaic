@@ -50,10 +50,10 @@ jobs:
     needs: build
     environment:
       name: "Production"
-       url: https://loan-api-app-ezgtdtdbekh5eghw.southafricanorth-01.azurewebsites.net/
+      url: https://loan-api-app-ezgtdtdbekh5eghw.southafricanorth-01.azurewebsites.net/
     permissions:
-      id-token: write 
-      contents: read 
+      id-token: write
+      contents: read
 
     steps:
       - name: Download artifact from build job
@@ -67,9 +67,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ AZURE_CLIENTID }}
-          tenant-id: ${{ AZURE_TENANTID }}
-          subscription-id: ${{ AZURE_SUBSCRIPTIONID }}
+          client-id: AZURE_CLIENTID
+          tenant-id: AZURE_TENANTID
+          subscription-id: AZURE_SUBSCRIPTIONID
 
       - name: "Deploy to Azure Web App"
         uses: azure/webapps-deploy@v3
