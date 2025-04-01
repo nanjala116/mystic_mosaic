@@ -1,6 +1,7 @@
 # Ignore data and tensorflow env
 tensorflow_env/
 data/pet_images/
+.elasticbeanstalk/
 
 __pycache__/
 *.py[cod]
