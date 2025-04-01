@@ -2,6 +2,7 @@
 tensorflow_env/
 data/pet_images/
 .elasticbeanstalk/
+.github/workflows/deploy.yml
 
 __pycache__/
 *.py[cod]
